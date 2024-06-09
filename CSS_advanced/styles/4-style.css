@@ -3,8 +3,8 @@ html {
 }
 
 body {
-    color: var(--text-color)
-    var(--font-family-base)
+    color: var(--text-color);
+    font-family: var(--font-family-base);
 }
 
 a {
@@ -16,11 +16,11 @@ a {
 }
 
 .card-category {
-    color: var(--color-primary)
+    color: var(--color-primary);
 }
 
 .section-tagline {
-    color: var(--color-primary)
+    color: var(--color-primary);
 }
 
 :root {

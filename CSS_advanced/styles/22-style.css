@@ -174,8 +174,8 @@ ul.row {
 }
 
 [data-section-theme="dark"] {
-    --text-color: white;
-    --section-title-color: white;
+    --text-color: var(--color-white);
+    --section-title-color: var(--color-white);
     background-color: var(--color-black);
 }
 

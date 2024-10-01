@@ -1,0 +1,18 @@
+/* Assigns font size and text color that extend style to a class */
+@mixin info-style {
+    font-size: 12px;
+}
+
+.info {
+    @include info-style();
+}
+
+.success {
+    @extend .info;
+    color: #00FF00;
+}
+
+.warning {
+    @extend .info;
+    color: #FF0000;
+}

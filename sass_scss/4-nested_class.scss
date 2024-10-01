@@ -1,0 +1,10 @@
+/* Assign text color to body and a class using nested declarations */
+$text-color: #3D3D3D;
+$class-color: #FF0000;
+
+body {
+    color: $text-color;
+    .red {
+        color: $class-color;
+    }
+}

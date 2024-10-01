@@ -1,0 +1,10 @@
+/* Assigns text color to body and the first children of the body */
+$text-color: #3D3D3D;
+$child-color: #FF0000;
+
+body {
+    color: $text-color;
+    > .red {
+        color: $child-color;
+    }
+}

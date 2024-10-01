@@ -1,0 +1,13 @@
+/* Assigns text color from a differnet file using @import */
+@import '10-colors';
+.red {
+    color: $red;
+}
+
+.green {
+    color: $green;
+}
+
+.blue {
+    color: $blue
+}

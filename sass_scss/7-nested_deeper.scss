@@ -1,0 +1,14 @@
+/* Assigns font size using nested declarations */
+$body-size: 14px;
+$h1-size: 16px;
+$h1-small-size: 12px;
+
+body {
+    font-size: $body-size;
+    h1 {
+        font-size: $h1-size;
+        &.smaller {
+            font-size: $h1-small-size;
+        }
+    }
+}

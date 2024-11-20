@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+    <head>
+
+        <meta charset="utf-8" />
+        <title>Task 0</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <style>
+            #pagination li {
+                display: inline;
+                cursor: pointer;
+                margin-left: 10px;
+            }
+
+            #pagination .current-page {
+                font-weight: bold;
+            }
+
+            .loading {
+                opacity: 0.2;
+            }
+        </style>
+    </head>
+
+    <body>
+        <script type="application/javascript">
+           function createSearchForm() {
+            let form = $('<form>').append(
+                $('<input>')
+                    .attr('type', 'text')
+                    .addClass('search-input'),
+                $('<input>')
+                    .attr('type', 'submit')
+                    .attr('value', 'Search')
+            );
+
+            let ul = $('<ul>').addClass('results-list');
+            let pagination = $('<ul>').attr('id', 'pagination');
+            
+            $('body').append(form, ul, pagination);
+
+            form.on('submit', function(event) {
+                event.preventDefault();
+
+                let searchValue = $('.search-input').val();
+
+                if (searchValue.trim()) {
+                    queryWikipedia(searchValue.trim(), 0);
+                }
+            });
+           }
+
+           function addNewArticle(id, title, snippet) {
+            let li = $('<li>').append(
+                $('<p>').append(
+                    $('<span>').text(id + ' - '),
+                    $('<b>').text(title)
+                ),
+                $('<p>').html(snippet)
+            );
+            $('.results-list').append(li);
+           }
+
+           function queryWikipedia(search, offset = 0) {
+            displayLoading(true)
+            let url = 'https://en.wikipedia.org/w/api.php'
+            let data = {
+                action: 'query',
+                list: 'search',
+                srsearch: search,
+                format: 'json',
+                origin: '*',
+                sroffset: offset,
+                srlimit: 10
+            };
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: data,
+                dataType: 'jsonp',
+                success: function(response) {
+                    $('.results-list').empty();
+
+                    response.query.search.forEach(result => {
+                        addNewArticle(result.pageid, result.title, result.snippet);
+                    });
+
+                    buildPagination(
+                        response.query.searchinfo.totalhits,
+                        10,
+                        offset
+                    );
+                },
+                complete: function() {
+                    displayLoading(false);
+                }
+            });
+           }
+
+           function buildPagination(numberOfItems, itemsPerPage, currentOffset) {
+            let paginationList = $('#pagination');
+            paginationList.empty();
+
+            let totalPages = Math.ceil(numberOfItems / itemsPerPage);
+            let currentPage = currentOffset / itemsPerPage;
+
+            for (let i = 0; i < totalPages; i++) {
+                let pageItem = $('<li>')
+                    .text(i + 1)
+                    .addClass(i === currentPage ? 'current-page' : '')
+                    .css({
+                        cursor: 'pointer',
+                        'margin-left': '10px',
+                    })
+                    .on('click', function () {
+                        queryWikipedia($('.search-input').val().trim(), i *itemsPerPage);
+                    });
+                    paginationList.append(pageItem)
+            }
+           }
+
+           function displayLoading(loading) {
+            let ul = $('ul.results-list');
+            if (loading) {
+                ul.wrap('<div class="loading"></div>');
+            } else {
+                if (ul.parent().hasClass('loading')) {
+                    ul.unwrap();
+                }
+            }
+           }
+
+           createSearchForm();
+        </script>
+    </body>
+
+</html>

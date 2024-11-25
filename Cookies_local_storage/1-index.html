@@ -23,8 +23,13 @@
             let firstname = document.getElementById('firstname').value;
             let email = document.getElementById('email').value;
 
-            document.cookie = `firstname=${firstname}; expires=Wed, 4 Dec 2024 23:59:59 CST;`;
-            document.cookie = `email=${email}; expires=Wed, 4 Dec 2024 23:59:59 CST;`;
+            let date = new Date();
+            date.setTime(date.getTime() + (10 * 24 * 60 * 60 * 1000));
+
+            let expires = "expires="+date.toUTCString();
+
+            document.cookie = `firstname=${firstname}; ${expires}`;
+            document.cookie = `email=${email}; ${expires}`;
         }
 
         function showCookies() {

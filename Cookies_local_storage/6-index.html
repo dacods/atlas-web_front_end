@@ -8,7 +8,7 @@
     <script>
         let availableItems = ['Shampoo', 'Soap', 'Sponge', 'Water']
 
-        if (!window.localStorage) {
+        if (!window.sessionStorage) {
             alert('Sorry, your browser does not support Web storage. Try again with a better one')
         } else {
             createStore();

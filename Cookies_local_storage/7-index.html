@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 7</title>
+</head>
+<body>
+    <script>
+        let availableItems = ['Shampoo', 'Soap', 'Sponge', 'Water']
+
+        if (!window.sessionStorage) {
+            alert('Sorry, your browser does not support Web storage. Try again with a better one')
+        } else {
+            createStore();
+            displayCart();
+        }
+
+        function getCartFromStorage() {
+            let cartString = sessionStorage.getItem('cart');
+            return cartString ? JSON.parse(cartString) : {};
+        }
+
+        function addItemToCart(item) {
+            let cart = getCartFromStorage();
+            cart[item] = (cart[item] || 0) + 1;
+            sessionStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        function removeItemFromCart(item) {
+            let cart = getCartFromStorage();
+            delete cart[item];
+            sessionStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        function createStore() {
+            let h2 = document.createElement('h2');
+            h2.textContent = 'Available products:';
+            document.body.appendChild(h2);
+
+            let ul = document.createElement('ul')
+            document.body.appendChild(ul);
+
+            availableItems.forEach(item => {
+                let li = document.createElement('li');
+                li.textContent = item;
+                li.onclick = () => addItemToCart(item);
+                ul.appendChild(li);
+            });
+        }
+
+        function displayCart() {
+            let existingCart = document.querySelector('#shopping-cart');
+            let existingHeading = document.querySelector('#cart-heading');
+            if (existingCart) {
+                existingCart.remove();
+            }
+            if (existingHeading) {
+                existingHeading.remove();
+            }
+
+            let h2 = document.createElement('h2');
+            h2.textContent = 'Your cart:';
+            h2.id = 'cart-heading';
+            document.body.appendChild(h2);
+
+            let div = document.createElement('div');
+            div.id = 'shopping-cart';
+            document.body.appendChild(div);
+
+            updateCart();
+        }
+
+        function clearCart() {
+            sessionStorage.clear();
+            displayCart();
+        }
+
+        function updateCart() {
+            let div = document.querySelector('#shopping-cart');
+            let cart = getCartFromStorage();
+            let ul = document.createElement('ul');
+
+            if (Object.keys(cart).length > 0) {
+                let clearCartItem = document.createElement('li')
+                let clearItem = document.createElement('span');
+                clearItem.textContent = 'Clear my cart';
+                clearItem.onclick = clearCart;
+                clearCartItem.appendChild(clearItem)
+                ul.appendChild(clearCartItem);
+            }
+
+            if (Object.keys(cart).length === 0) {
+                let li = document.createElement('li');
+                li.textContent = 'Your cart is empty';
+                ul.appendChild(li);
+            } else {
+                for (let [item, quantity] of Object.entries(cart)) {
+                    let li = document.createElement('li');
+                    li.textContent = `${item} x ${quantity} `;
+
+                    let removeLink = document.createElement('span');
+                    removeLink.textContent = '(remove)';
+                    removeLink.className = 'remove-link';
+                    removeLink.onclick = (error) => {
+                        error.stopPropagation();
+                        removeItemFromCart(item);
+                    };
+
+                    li.appendChild(removeLink);
+                    ul.appendChild(li);
+                }
+            }
+            div.appendChild(ul);
+        }
+    </script>
+</body>
+</html>
